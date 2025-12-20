@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Início - Melhor Amigo{% endblock %}
+
+{% block content %}
+
+<section class="hero-section text-center py-5" style="background-color: #e9f7ef;">
+    <div class="container">
+        <h1 class="display-4 fw-bold text-success mb-3">Bem-vindo ao Petshop "Melhor Amigo"!</h1> <p class="lead text-muted mx-auto" style="max-width: 800px;">
+            Nós entendemos que seu animal de estimação é mais do que apenas um bichinho, 
+            é um membro especial da sua família. </p>
+        <div class="mt-4">
+            <a href="{% url 'product_list' %}" class="btn btn-success btn-lg px-5 shadow-sm">Ver Nossos Serviços</a> <a href="{% url 'contact' %}" class="btn btn-outline-success btn-lg px-5 ms-2">Fale Conosco</a>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <div class="bg-secondary rounded shadow-sm d-flex align-items-center justify-content-center text-white" style="height: 300px;">
+                    <i class="bi bi-camera-fill display-1"></i>
+                    <span class="ms-3">Imagem Institucional</span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h2 class="text-success mb-3">Cuidado e Dedicação</h2>
+                <p>
+                    Com isso em mente, estamos comprometidos em fornecer cuidados excepcionais e 
+                    serviços de alta qualidade para garantir que seu melhor amigo tenha uma vida 
+                    feliz e saudável. </p>
+                <p>
+                    Com uma equipe dedicada e apaixonada por animais, nossos profissionais 
+                    treinados estão prontos para oferecer os melhores cuidados para o seu pet. </p>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Tosa Profissional</li> <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Banho e Higienização</li> <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Rações Premium</li> </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-light py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Nossos Serviços e Produtos</h2>
+            <p class="text-muted">Confira o que preparamos para o seu amigo</p>
+        </div>
+
+        <div class="row">
+            {% if featured_products %}
+                {% for item in featured_products %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        {% if item.image %}
+                            <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.name }}">
+                        {% else %}
+                            <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center text-white" style="height: 200px;">
+                                Sem Foto
+                            </div>
+                        {% endif %}
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-success">{{ item.name }}</h5>
+                            <p class="card-text text-muted small">{{ item.description|truncatewords:20 }}</p>
+                            <a href="{% url 'product_list' %}" class="btn btn-outline-success btn-sm">Saiba Mais</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12 text-center">
+                    <div class="alert alert-warning">
+                        Nenhum produto cadastrado ainda. Acesse o <a href="/admin">Painel Admin</a> para adicionar destaques aqui!
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="py-5 text-center bg-success text-white">
+    <div class="container">
+        <h2 class="mb-3">Galeria de Fofura</h2>
+        <p class="lead mb-4">Nossa galeria de fotos é o reflexo do nosso amor e cuidado pelos animais. </p>
+        <a href="{% url 'gallery' %}" class="btn btn-light btn-lg">Ver Galeria de Fotos</a>
+    </div>
+</section>
+
+{% endblock %}

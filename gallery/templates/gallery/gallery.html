@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Galeria - Melhor Amigo{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="fw-bold text-success">Galeria de Fofura</h1>
+        <p class="lead text-muted">Veja alguns dos amigos que já passaram por aqui</p>
+    </div>
+
+    <div class="row g-4">
+        {% for photo in photos %}
+        <div class="col-md-4 col-sm-6">
+            <div class="card border-0 shadow-sm h-100">
+                <img src="{{ photo.image.url }}" class="card-img-top rounded" alt="{{ photo.title }}" 
+                     style="height: 300px; object-fit: cover; cursor: pointer;"
+                     data-bs-toggle="modal" data-bs-target="#modal{{ photo.id }}">
+                <div class="card-body text-center py-2">
+                    <small class="text-muted fw-bold">{{ photo.title }}</small>
+                    {% if photo.caption %}
+                        <p class="card-text small text-muted">{{ photo.caption }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modal{{ photo.id }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content bg-transparent border-0">
+                    <div class="modal-body p-0 text-center">
+                        <img src="{{ photo.image.url }}" class="img-fluid rounded shadow" alt="{{ photo.title }}">
+                        <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+            <div class="col-12 text-center">
+                <p class="text-muted">Nenhuma foto adicionada ainda.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
