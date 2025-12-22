@@ -26,3 +26,21 @@ class NewsletterSubscriber(models.Model):
 
     def __str__(self):
         return self.email
+    
+
+class SiteConfiguration(models.Model):
+    # Imagens da Home
+    home_banner = models.ImageField(upload_to='site_setup/', verbose_name="Banner da Página Inicial")
+    
+    # Imagens do Sobre Nós
+    about_image = models.ImageField(upload_to='site_setup/', verbose_name="Foto da Seção Sobre Nós")
+    
+    # Imagens do Contato (Opcional)
+    contact_banner = models.ImageField(upload_to='site_setup/', blank=True, null=True, verbose_name="Banner da Página de Contato")
+
+    class Meta:
+        verbose_name = "Configuração do Site"
+        verbose_name_plural = "Configurações do Site"
+
+    def __str__(self):
+        return "Configuração Principal (Edite aqui)"

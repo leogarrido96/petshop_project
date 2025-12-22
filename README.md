@@ -216,10 +216,11 @@ docker-compose logs pgadmin
 
 ## 📚 Próximas Implementações
 
+- [ ] Sistema de API do projeto
 - [ ] Sistema de autenticação de usuários
 - [ ] Carrinho de compras
 - [ ] Sistema de pedidos
-- [ ] Integração com pagamento
+- [ ] Integração com Frete
 - [ ] Notificações por email
 - [ ] Dashboard de vendas
 - [ ] Sistema de avaliações

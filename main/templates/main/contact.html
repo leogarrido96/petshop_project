@@ -4,47 +4,52 @@
 {% block title %}Início - Melhor Amigo{% endblock %}
 
 {% block content %}
-<div class="container">
-<form method="POST">
-    {% csrf_token %}
-    
-    <div class="mb-3">
-        <label for="{{ form.name.id_for_label }}" class="form-label">Nome Completo</label>
-        {{ form.name }}
-        <div class="text-danger small">{{ form.name.errors }}</div>
-    </div>
-    
-    <div class="row">
-        <div class="col-md-6 mb-3">
-            <label for="{{ form.email.id_for_label }}" class="form-label">E-mail</label>
-            {{ form.email }}
-            <div class="text-danger small">{{ form.email.errors }}</div>
-        </div>
-        <div class="col-md-6 mb-3">
-            <label for="{{ form.phone.id_for_label }}" class="form-label">Telefone</label>
-            {{ form.phone }}
-            <div class="text-danger small">{{ form.phone.errors }}</div>
-        </div>
-    </div>
+<div class="container my-5"> <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+            <div class="p-4 border rounded shadow-sm bg-white">
+                
+                <h3 class="text-center mb-4 text-success">Entre em Contato</h3>
 
-    <div class="mb-3">
-        <label for="{{ form.message.id_for_label }}" class="form-label">Mensagem</label>
-        {{ form.message }}
-        <div class="text-danger small">{{ form.message.errors }}</div>
-    </div>
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.name.id_for_label }}" class="form-label">Nome Completo</label>
+                        {{ form.name }}
+                        <div class="text-danger small">{{ form.name.errors }}</div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.email.id_for_label }}" class="form-label">E-mail</label>
+                            {{ form.email }}
+                            <div class="text-danger small">{{ form.email.errors }}</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.phone.id_for_label }}" class="form-label">Telefone</label>
+                            {{ form.phone }}
+                            <div class="text-danger small">{{ form.phone.errors }}</div>
+                        </div>
+                    </div>
 
-    <div class="form-check mb-4">
-        {{ form.newsletter }}
-        <label class="form-check-label text-muted" for="{{ form.newsletter.id_for_label }}">
-            Desejo receber promoções e novidades por e-mail.
-        </label>
-    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.message.id_for_label }}" class="form-label">Mensagem</label>
+                        {{ form.message }}
+                        <div class="text-danger small">{{ form.message.errors }}</div>
+                    </div>
 
-    <div class="d-grid">
-        <button type="submit" class="btn btn-success btn-lg">Enviar Mensagem</button>
-    </div>
-    </div>
+                    <div class="form-check mb-4">
+                        {{ form.newsletter }}
+                        <label class="form-check-label text-muted" for="{{ form.newsletter.id_for_label }}">
+                            Desejo receber promoções e novidades por e-mail.
+                        </label>
+                    </div>
 
-</form>
-
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success btn-lg">Enviar Mensagem</button>
+                    </div>
+                </form>
+            </div> </div>
+    </div>
+</div>
 {% endblock %}

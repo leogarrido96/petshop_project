@@ -1,4 +1,116 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Início - Melhor Amigo{% endblock %}
+{% block title %}Sobre Nós - Melhor Amigo{% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/about.css' %}">
+{% endblock %}
+{% block content %}
+<div class="about-page">
+    
+    <section class="about-hero">
+        <div class="container">
+            <h1>Sobre o Petshop "Melhor Amigo"</h1>
+            <p class="subtitle">Cuidando do seu melhor amigo como se fosse nosso.</p>
+        </div>
+    </section>
+
+    <section class="about-mission container">
+        <div class="row">
+            <div class="col-text">
+                <h2>Nossa Filosofia</h2>
+                <p>
+                    Bem-vindo ao Petshop "Melhor Amigo"!
+                </p>
+                <p>
+                    No Petshop "Melhor Amigo", nós entendemos que seu animal de estimação é mais do que
+                    apenas um bichinho, <strong>é um membro especial da sua família.</strong> 
+                    Com isso em mente, estamos comprometidos em fornecer cuidados excepcionais 
+                    e serviços de alta qualidade para garantir que seu melhor amigo tenha uma vida feliz
+                    e saudável.
+                </p>
+                <p>
+                    Com uma equipe dedicada e apaixonada por animais, nossos profissionais treinados 
+                    estão prontos para oferecer os melhores cuidados para o seu pet. Desde serviços de 
+                    tosa profissional, onde deixaremos seu animalzinho com um visual impecável, até a 
+                    limpeza e higienização completa, proporcionamos um ambiente seguro e tranquilo para 
+                    que seu amigo se sinta confortável durante todo o processo.
+                </p>
+                <p>
+                    Sabemos que a alimentação é fundamental para a saúde do seu pet, 
+                    por isso oferecemos uma ampla variedade de rações de alta qualidade 
+                    e alimentos balanceados, adaptados às necessidades individuais de cada animal. 
+                    Nossos especialistas estão disponíveis para fornecer orientação personalizada e 
+                    ajudá-lo a escolher a melhor opção para o seu amiguinho.
+                </p>
+                <p>
+                    No Petshop "Melhor Amigo", também acreditamos na importância da socialização 
+                    e diversão para o bem-estar dos animais. Por isso, oferecemos momentos especiais 
+                    de brincadeiras e interação em nosso espaço dedicado, garantindo que seu pet se 
+                    divirta e faça novos amigos. Além disso, temos uma ampla variedade de brinquedos 
+                    e acessórios para enriquecer a vida do seu animalzinho.
+                </p>
+                <p>
+                    Nossa galeria de fotos é o reflexo do nosso amor e cuidado pelos animais. 
+                    Lá, você poderá ver alguns dos adoráveis clientes que já passaram pelo nosso petshop. 
+                    É um verdadeiro prazer atender a cada um deles e contribuir para o seu bem-estar e 
+                    felicidade.
+                </p>
+                <p>
+                    Estamos ansiosos para conhecê-lo e ao seu melhor amigo! 
+                    Visite-nos no Petshop "Melhor Amigo" e descubra a diferença que fazemos na 
+                    vida dos animais de estimação. Entre em contato conosco por telefone, e-mail 
+                    ou através do nosso formulário de contato no nosso site. 
+                    Seu pet merece o melhor, e nós estamos aqui para fornecer exatamente isso. 
+                    Confie no Petshop "Melhor Amigo" para cuidar do seu melhor amigo como se 
+                    fosse nosso próprio.
+                </p>
+            </div>
+            <div class="col-image">
+                {% if site_config.about_image %}
+                    <img src="{{ site_config.about_image.url }}" alt="Equipe Petshop">
+                {% else %}
+                    <img src="{% static 'images/sobre-nos-pet.jpg' %}" alt="Equipe Petshop">
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <section class="values-section">
+        <div class="container">
+            <h2>Por que nos escolher?</h2>
+            <div class="values-grid">
+                
+                <div class="value-card">
+                    <div class="icon">💚</div> <h3>Amor e Carinho</h3>
+                    <p>Tratamos cada animal com o respeito e o amor que ele merece.</p>
+                </div>
+
+                <div class="value-card">
+                    <div class="icon">✂️</div>
+                    <h3>Profissionais Treinados</h3>
+                    <p>Nossa equipe é especializada em tosa e cuidados estéticos de alto padrão.</p>
+                </div>
+
+                <div class="value-card">
+                    <div class="icon">🛡️</div>
+                    <h3>Ambiente Seguro</h3>
+                    <p>Instalações limpas e monitoradas para a segurança do seu melhor amigo.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <h2>Venha nos conhecer!</h2>
+            <p>Estamos ansiosos para conhecê-lo e ao seu melhor amigo.</p>
+            <a href="/contato/" class="btn-primary">Entre em Contato</a>
+            <a href="/galeria/" class="btn-secondary">Ver Galeria de Fotos</a>
+        </div>
+    </section>
+
+</div>
+
+{% endblock %}
