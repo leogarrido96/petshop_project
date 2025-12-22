@@ -2,16 +2,14 @@ from django.views.generic import TemplateView, CreateView
 from django.urls import reverse_lazy
 from django.contrib import messages
 
-# --- CORREÇÃO 1: Importar os Models necessários ---
-from .models import NewsletterSubscriber, ContactMessage 
+from .models import NewsletterSubscriber
 from .forms import ContactForm
 
-# Importando model do outro app para os destaques (se o app catalog existir)
-# Usamos try/except para evitar erro caso você ainda não tenha criado produtos
 try:
     from catalog.models import Product
 except ImportError:
     Product = None
+
 
 class HomeView(TemplateView):
     """
@@ -41,14 +39,12 @@ class ContactView(CreateView):
     """
     template_name = 'main/contact.html'
     form_class = ContactForm
-    success_url = reverse_lazy('contact') # Redireciona para a mesma página após enviar
+    success_url = reverse_lazy('contact')  # Redireciona para a mesma página após enviar
 
     def form_valid(self, form):
-        # Lógica extra: Verificar a newsletter antes de salvar
         newsletter = form.cleaned_data.get('newsletter')
-        
-        # --- CORREÇÃO 2: Definir a variável email pegando do formulário ---
-        email = form.cleaned_data.get('email') 
+
+        email = form.cleaned_data.get('email')
 
         # Só tenta salvar se o usuário marcou o checkbox E se existe um email
         if newsletter and email:
@@ -56,5 +52,5 @@ class ContactView(CreateView):
 
         # Adiciona mensagem de sucesso para aparecer no topo do site
         messages.success(self.request, 'Sua mensagem foi enviada com sucesso!')
-        
+
         return super().form_valid(form)

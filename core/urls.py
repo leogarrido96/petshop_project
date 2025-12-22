@@ -15,12 +15,12 @@ router = routers.DefaultRouter()
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    
+
     # Rotas dos Apps
-    path('', include('main.urls')),      # A Home fica no app main
+    path('', include('main.urls')),  # A Home fica no app main
     path('catalogo/', include('catalog.urls')),
     path('galeria/', include('gallery.urls')),
-    
+
     # Rota da API
     path('api/', include(router.urls)),
 ]

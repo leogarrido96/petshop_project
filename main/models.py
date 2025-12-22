@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class ContactMessage(models.Model):
     name = models.CharField(max_length=100, verbose_name="Nome")
     email = models.EmailField(verbose_name="E-mail")
@@ -16,6 +17,7 @@ class ContactMessage(models.Model):
     def __str__(self):
         return f"{self.name} - {self.created_at.strftime('%d/%m/%Y')}"
 
+
 class NewsletterSubscriber(models.Model):
     email = models.EmailField(unique=True, verbose_name="E-mail")
     subscribed_at = models.DateTimeField(auto_now_add=True, verbose_name="Inscrito em")
@@ -26,15 +28,15 @@ class NewsletterSubscriber(models.Model):
 
     def __str__(self):
         return self.email
-    
+
 
 class SiteConfiguration(models.Model):
     # Imagens da Home
     home_banner = models.ImageField(upload_to='site_setup/', verbose_name="Banner da Página Inicial")
-    
+
     # Imagens do Sobre Nós
     about_image = models.ImageField(upload_to='site_setup/', verbose_name="Foto da Seção Sobre Nós")
-    
+
     # Imagens do Contato (Opcional)
     contact_banner = models.ImageField(upload_to='site_setup/', blank=True, null=True, verbose_name="Banner da Página de Contato")
 

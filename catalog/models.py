@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Category(models.Model):
     name = models.CharField(max_length=100, verbose_name="Nome da Categoria")
     slug = models.SlugField(unique=True, help_text="Identificador único para URL (ex: ração-premium)")
@@ -11,6 +12,7 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products', verbose_name="Categoria")

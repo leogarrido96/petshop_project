@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Photo(models.Model):
     title = models.CharField(max_length=100, verbose_name="Nome do Pet / Título")
     caption = models.CharField(max_length=255, blank=True, verbose_name="Legenda")

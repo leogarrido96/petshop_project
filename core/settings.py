@@ -24,7 +24,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # --- CORREÇÃO 3: Adicionando seus Apps e Libs ---
-    'rest_framework', # Para a API
+    'rest_framework',  # Para a API
     'main',           # App Institucional (antigo core)
     'catalog',        # Produtos e Serviços
     'gallery',        # Galeria de Fotos
@@ -46,7 +46,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         # --- CORREÇÃO 4: Apontando para a pasta global de templates ---
-        'DIRS': [BASE_DIR / 'templates'], 
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -70,7 +70,7 @@ DATABASES = {
         'NAME': os.environ.get('POSTGRES_DB'),
         'USER': os.environ.get('POSTGRES_USER'),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST'), 
+        'HOST': os.environ.get('DB_HOST'),
         'PORT': os.environ.get('DB_PORT'),
     }
 }
@@ -103,7 +103,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = 'static/'
 # Adicione isso para garantir que o Docker ache os arquivos estáticos
-STATIC_ROOT = BASE_DIR / 'staticfiles' 
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # --- CORREÇÃO 5: Configuração de Upload de Mídia (Essencial para o Petshop) ---
 MEDIA_URL = '/media/'
