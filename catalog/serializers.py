@@ -1,0 +1,18 @@
+from rest_framework import serializers
+from .models import Category, Product
+
+
+class ProductSerializer(serializers.ModelSerializer):
+    category_name = serializers.ReadOnlyField(source='category.name')
+
+    class Meta:
+        model = Product
+        fields = ['id', 'name', 'description', 'price', 'image', 'category', 'category_name', 'is_active']
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    products = ProductSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Category
+        fields = ['id', 'name', 'slug', 'products']

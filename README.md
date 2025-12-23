@@ -157,17 +157,186 @@ Para acessar o painel administrativo:
 ```bash
 python manage.py createsuperuser
 ```
-
 2. Acesse: http://localhost:8000/admin
+3.  Crie um token para API:
+```bash
+python manage.py drf_create_token {nome_superusuário}
+```
 
 ## 🌐 API REST
 
-O projeto inclui uma API REST para integração:
+O projeto inclui uma API REST completa para integração com outros sistemas:
 
-- **Base URL**: http://localhost:8000/api/
-- **Endpoints** (em desenvolvimento):
-  - `/produtos/` - Listagem de produtos
-  - `/galeria/` - Galeria de fotos
+- **Base URL**: http://localhost:8000/api/v1
+- **Autenticação**: DRF Token Authentication
+- **Permissões**: IsAuthenticatedOrReadOnly (leitura pública, escrita autenticada)
+
+### 📚 Endpoints Disponíveis
+
+#### 🏷️ Categorias - `/categories/`
+**Somente Leitura** (ReadOnlyModelViewSet)
+- `GET /api/v1/categories/` - Lista todas as categorias com produtos
+- `GET /api/v1/categories/{id}/` - Detalhes de uma categoria específica
+
+**Campos retornados:**
+```json
+{
+  "id": 1,
+  "name": "Ração Premium",
+  "slug": "racao-premium",
+  "products": [
+    {
+      "id": 1,
+      "name": "Ração Golden Special",
+      "description": "Ração premium para cães adultos",
+      "price": "89.90",
+      "image": "/media/products/racao-golden.jpg",
+      "category": 1,
+      "category_name": "Ração Premium",
+      "is_active": true
+    }
+  ]
+}
+```
+
+#### 📦 Produtos - `/products/`
+**CRUD Completo** (ModelViewSet)
+- `GET /api/v1/products/` - Lista todos os produtos ativos
+- `POST /api/v1/products/` - Cria um novo produto (autenticação necessária)
+- `GET /api/v1/products/{id}/` - Detalhes de um produto específico
+- `PUT /api/v1/products/{id}/` - Atualiza um produto completo (autenticação necessária)
+- `PATCH /api/v1/products/{id}/` - Atualiza parcialmente um produto (autenticação necessária)
+- `DELETE /api/v1/products/{id}/` - Remove um produto (autenticação necessária)
+
+**Campos retornados:**
+```json
+{
+  "id": 1,
+  "name": "Ração Golden Special",
+  "description": "Ração premium para cães adultos de todas as raças",
+  "price": "89.90",
+  "image": "/media/products/racao-golden.jpg",
+  "category": 1,
+  "category_name": "Ração Premium",
+  "is_active": true
+}
+```
+
+#### 📸 Galeria - `/gallery/`
+**CRUD Completo** (ModelViewSet)
+- `GET /api/v1/gallery/` - Lista todas as fotos (ordenadas por data)
+- `POST /api/v1/gallery/` - Adiciona uma nova foto (autenticação necessária)
+- `GET /api/v1/gallery/{id}/` - Detalhes de uma foto específica
+- `PUT /api/v1/gallery/{id}/` - Atualiza uma foto completa (autenticação necessária)
+- `PATCH /api/v1/gallery/{id}/` - Atualiza parcialmente uma foto (autenticação necessária)
+- `DELETE /api/v1/gallery/{id}/` - Remove uma foto (autenticação necessária)
+
+**Campos retornados:**
+```json
+{
+  "id": 1,
+  "title": "Rex após o banho",
+  "caption": "Nosso cliente Rex ficou lindo após o banho e tosa!",
+  "image": "/media/gallery/rex-banho.jpg",
+  "uploaded_at": "2024-12-23T10:30:00Z"
+}
+```
+
+#### ⚙️ Configuração do Site - `/site-config/`
+**Somente Leitura** (ReadOnlyModelViewSet)
+- `GET /api/v1/site-config/` - Lista configurações do site
+- `GET /api/v1/site-config/{id}/` - Detalhes de configuração específica
+
+#### 📞 Mensagens de Contato - `/contact/`
+**Somente Criação** (CreateModelMixin)
+- `POST /api/v1/contact/` - Cria uma nova mensagem de contato
+
+**Campos para envio:**
+```json
+{
+  "name": "João Silva",
+  "email": "joao@email.com",
+  "phone": "(11) 99999-9999",
+  "message": "Gostaria de mais informações sobre os serviços",
+  "created_at": "2024-12-23T10:30:00Z"
+}
+```
+
+### 🔐 Autenticação
+
+#### Obter Token de Autenticação
+```bash
+# Via Django Command
+python manage.py drf_create_token {username}
+
+# Via API (se configurado)
+POST /api-auth/login/
+```
+
+#### Usar Token nas Requisições
+```bash
+# Header de Autorização
+Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b
+
+# Exemplo com curl
+curl -H "Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b" \
+     http://localhost:8000/api/v1/products/
+```
+
+### 📝 Exemplos de Uso
+
+#### Listar Produtos
+```bash
+curl -X GET http://localhost:8000/api/v1/products/
+```
+
+#### Criar um Produto
+```bash
+curl -X POST http://localhost:8000/api/v1/products/ \
+  -H "Authorization: Token SEU_TOKEN_AQUI" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Brinquedo Kong",
+    "description": "Brinquedo resistente para cães",
+    "price": "45.90",
+    "category": 2,
+    "is_active": true
+  }'
+```
+
+#### Filtrar Produtos por Categoria
+```bash
+curl -X GET "http://localhost:8000/api/v1/products/?category=1"
+```
+
+#### Enviar Mensagem de Contato
+```bash
+curl -X POST http://localhost:8000/api/v1/contact/ \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Maria Santos",
+    "email": "maria@email.com", 
+    "phone": "(11) 88888-8888",
+    "message": "Interessada nos serviços de banho e tosa"
+  }'
+```
+
+### 🌐 Rotas Web (Frontend)
+
+#### Páginas Institucionais
+- `GET /` - Home page
+- `GET /sobre-nos/` - Página sobre a empresa  
+- `GET /contato/` - Formulário de contato
+
+#### Catálogo de Produtos
+- `GET /catalogo/` - Lista de produtos por categoria
+
+#### Galeria
+- `GET /galeria/` - Galeria de fotos dos pets
+
+#### Administração
+- `GET /admin/` - Painel administrativo Django
+- `GET /api-auth/` - Interface de autenticação DRF
 
 ## 📝 Comandos Úteis
 
@@ -216,7 +385,7 @@ docker-compose logs pgadmin
 
 ## 📚 Próximas Implementações
 
-- [ ] Sistema de API do projeto
+- [✅] Sistema de API do projeto
 - [ ] Sistema de autenticação de usuários
 - [ ] Carrinho de compras
 - [ ] Sistema de pedidos

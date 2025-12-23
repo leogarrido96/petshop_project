@@ -1,9 +1,11 @@
 from django.views.generic import TemplateView, CreateView
 from django.urls import reverse_lazy
 from django.contrib import messages
+from rest_framework import viewsets, mixins
 
-from .models import NewsletterSubscriber
+from .models import NewsletterSubscriber, SiteConfiguration, ContactMessage
 from .forms import ContactForm
+from .serializers import SiteConfigSerializer, ContactMessageSerializer
 
 try:
     from catalog.models import Product
@@ -54,3 +56,14 @@ class ContactView(CreateView):
         messages.success(self.request, 'Sua mensagem foi enviada com sucesso!')
 
         return super().form_valid(form)
+
+
+class SiteConfigViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = SiteConfiguration.objects.all()
+    serializer_class = SiteConfigSerializer
+
+
+class ContactMessageViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+    """Permite apenas a criação (POST) de mensagens via API"""
+    queryset = ContactMessage.objects.all()
+    serializer_class = ContactMessageSerializer
