@@ -385,7 +385,7 @@ docker-compose logs pgadmin
 
 ## 📚 Próximas Implementações
 
-- [✅] Sistema de API do projeto
+- [x] Sistema de API do projeto
 - [ ] Sistema de autenticação de usuários
 - [ ] Carrinho de compras
 - [ ] Sistema de pedidos
