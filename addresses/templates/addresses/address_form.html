@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+
+{% block title %}Endereço de Entrega - Melhor Amigo{% endblock %}
+
+{% block extra_css %}
+<style>
+    .required-label::after {
+        content: " *";
+        color: #dc3545;
+        font-weight: bold;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: #198754;
+        box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="bg-success py-2"></div>
+                
+                <div class="card-body p-4 p-md-5">
+                    <div class="d-flex align-items-center mb-5">
+                        <div class="bg-success-subtle p-3 rounded-circle me-3">
+                            <i class="bi bi-geo-alt-fill text-success fs-3"></i>
+                        </div>
+                        <div>
+                            <h2 class="fw-bold mb-0 text-dark">Endereço</h2>
+                            <p class="text-muted mb-0">Onde devemos buscar seu melhor amigo?</p>
+                        </div>
+                    </div>
+
+                    <form method="post" class="row g-4" id="addressForm">
+                        {% csrf_token %}
+                        
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold {% if form.zip_code.field.required %}required-label{% endif %}">
+                                {{ form.zip_code.label }}
+                            </label>
+                            {{ form.zip_code }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold {% if form.city.field.required %}required-label{% endif %}">
+                                {{ form.city.label }}
+                            </label>
+                            {{ form.city }}
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold {% if form.state.field.required %}required-label{% endif %}">
+                                {{ form.state.label }}
+                            </label>
+                            {{ form.state }}
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label fw-bold {% if form.street.field.required %}required-label{% endif %}">
+                                {{ form.street.label }}
+                            </label>
+                            {{ form.street }}
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold {% if form.number.field.required %}required-label{% endif %}">
+                                {{ form.number.label }}
+                            </label>
+                            {{ form.number }}
+                        </div>
+                        <div class="col-md-8">
+                            <label class="form-label fw-bold {% if form.complement.field.required %}required-label{% endif %}">
+                                {{ form.complement.label }}
+                            </label>
+                            {{ form.complement }}
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label fw-bold {% if form.neighborhood.field.required %}required-label{% endif %}">
+                                {{ form.neighborhood.label }}
+                            </label>
+                            {{ form.neighborhood }}
+                        </div>
+
+                        <div class="col-12 mt-3">
+                            <div class="form-check form-switch p-3 bg-light rounded-3 border">
+                                <div class="ms-5">
+                                    {{ form.is_main }}
+                                    <label class="form-check-label fw-semibold text-secondary" for="{{ form.is_main.id_for_label }}">
+                                        Definir como endereço principal para coletas
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 mt-5">
+                            <div class="d-flex flex-column flex-md-row gap-3">
+                                <button type="submit" class="btn btn-success px-5 py-2 rounded-pill fw-bold shadow-sm">
+                                    <i class="bi bi-check-circle me-2"></i>Salvar Endereço
+                                </button>
+                                <a href="{% url 'address_list' %}" class="btn btn-outline-secondary px-5 py-2 rounded-pill fw-bold">Voltar</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("Script de endereço carregado!");
+
+        const zipInput = document.getElementById('id_zip_code');
+        const streetField = document.getElementById('id_street');
+        const neighborhoodField = document.getElementById('id_neighborhood');
+        const cityField = document.getElementById('id_city');
+        const stateField = document.getElementById('id_state');
+
+        // Função de Máscara
+        const applyZipMask = (value) => {
+            if (!value) return "";
+            value = value.replace(/\D/g, '');
+            return value.replace(/(\d{5})(\d)/, '$1-$2');
+        };
+
+        if (zipInput) {
+            // Máscara enquanto digita
+            zipInput.addEventListener('input', (e) => {
+                e.target.value = applyZipMask(e.target.value);
+            });
+
+            // Busca automática
+            zipInput.addEventListener('blur', () => {
+                let zip = zipInput.value.replace(/\D/g, '');
+                console.log("Tentando buscar CEP: " + zip);
+                
+                if (zip.length === 8) {
+                    fetch(`https://viacep.com.br/ws/${zip}/json/`)
+                        .then(res => res.json())
+                        .then(data => {
+                            console.log("Dados recebidos:", data);
+                            if (!data.erro) {
+                                if(streetField) streetField.value = data.logradouro;
+                                if(neighborhoodField) neighborhoodField.value = data.bairro;
+                                if(cityField) cityField.value = data.localidade;
+                                if(stateField) stateField.value = data.uf;
+                                
+                                const numField = document.getElementById('id_number');
+                                if(numField) numField.focus();
+                            } else {
+                                alert("CEP não encontrado.");
+                            }
+                        })
+                        .catch(err => console.error("Erro na requisição:", err));
+                }
+            });
+        } else {
+            console.error("ERRO: Campo 'id_zip_code' não encontrado na página!");
+        }
+    });
+</script>
+{% endblock %}

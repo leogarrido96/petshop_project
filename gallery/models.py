@@ -5,7 +5,9 @@ class Photo(models.Model):
     title = models.CharField(max_length=100, verbose_name="Nome do Pet / Título")
     caption = models.CharField(max_length=255, blank=True, verbose_name="Legenda")
     image = models.ImageField(upload_to='gallery/', verbose_name="Foto")
+    active = models.BooleanField(default=None, null=True, blank=True, verbose_name="Ativo")
     uploaded_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = "Foto"

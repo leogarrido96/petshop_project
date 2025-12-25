@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Cadastre-se - Melhor Amigo{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-0 shadow-lg rounded-4">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <div class="bg-success-subtle d-inline-block p-3 rounded-circle mb-3">
+                            <i class="bi bi-person-plus-fill text-success fs-1"></i>
+                        </div>
+                        <h2 class="fw-bold">Criar Conta</h2>
+                        <p class="text-muted">Junte-se à nossa família e cuide bem do seu pet.</p>
+                    </div>
+
+                    {% load crispy_forms_tags %}
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <button type="submit" class="btn btn-success w-100 rounded-pill">Finalizar Cadastro</button>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <div class="text-center">
+                        <p class="small text-muted mb-0">Já tem uma conta?</p>
+                        <a href="{% url 'login' %}" class="text-success fw-bold text-decoration-none">Entrar agora</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Aplicando as máscaras nos campos de CPF e Telefone
+    const cpfInput = document.getElementById('id_cpf');
+    const phoneInput = document.getElementById('id_phone');
+
+    if (cpfInput) {
+        cpfInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            value = value.replace(/(\d{3})(\d)/, '$1.$2');
+            value = value.replace(/(\d{3})(\d)/, '$1.$2');
+            value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+            e.target.value = value;
+        });
+    }
+
+    if (phoneInput) {
+        phoneInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            value = value.replace(/(\d{2})(\d)/, '($1) $2');
+            value = value.replace(/(\d{5})(\d)/, '$1-$2');
+            e.target.value = value;
+        });
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow border-0">
+                <div class="card-body p-5">
+                    <h2 class="text-center text-success mb-4">Entrar na Família</h2>
+                    <p class="text-center text-muted mb-4">Cuidamos do seu melhor amigo como se fosse nosso[cite: 64].</p>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">{{ field.label }}</label>
+                                {{ field }} </div>
+                        {% endfor %}
+                        <button type="submit" class="btn btn-success w-100 py-2 fw-bold">Entrar</button>
+                    </form>
+                    
+                    <div class="text-center mt-4">
+                        <p>Ainda não tem conta? <a href="{% url 'signup' %}" class="text-success">Cadastre-se aqui</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

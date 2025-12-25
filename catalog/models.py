@@ -24,6 +24,7 @@ class Product(models.Model):
     image = models.ImageField(upload_to='products/', verbose_name="Imagem")
     is_active = models.BooleanField(default=True, verbose_name="Ativo?")
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = "Produto/Serviço"

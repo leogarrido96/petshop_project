@@ -16,34 +16,66 @@
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
-        <div class="container">
-            <a class="navbar-brand fw-bold text-success" href="{% url 'home' %}">
-                <i class="bi bi-heart-pulse-fill"></i> Melhor Amigo
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+    <div class="container">
+        <a class="navbar-brand fw-bold text-success" href="{% url 'home' %}">
+            <i class="bi bi-heart-pulse-fill"></i> Melhor Amigo
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item">
+                   {% if user.is_authenticated %}  <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+                   {% else %} <a class="nav-link" href="{% url 'home' %}">Início</a> {% endif %}
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'about' %}">Sobre Nós</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'product_list' %}">Serviços & Produtos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'gallery:gallery_list' %}">Galeria</a>
+                </li>
+                <li class="nav-item me-lg-3">
+                    <a class="nav-link" href="{% url 'contact' %}">Contato</a>
+                </li>
+
+                <div class="vr d-none d-lg-block mx-2 h-25"></div>
+
+                {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-success fw-bold" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> {{ user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm">
+                            <li><a class="dropdown-item" href="{% url 'dashboard' %}">Meu Painel</a></li>
+                            <li><a class="dropdown-item" href="{% url 'pet_list' %}">Meus Pets</a></li>
+                            <li><a class="dropdown-item" href="{% url 'address_list' %}">Endereços</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form action="{% url 'logout' %}" method="post" class="px-3">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-outline-danger btn-sm w-100">Sair</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}">Início</a>
+                        <a class="nav-link" href="{% url 'login' %}">Entrar</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'about' %}">Sobre Nós</a>
+                        <a class="btn btn-success text-white px-4 ms-lg-2 rounded-pill shadow-sm" href="{% url 'signup' %}">
+                            Cadastre-se
+                        </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'product_list' %}">Serviços & Produtos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'gallery' %}">Galeria</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-success text-white px-4 ms-2" href="{% url 'contact' %}">Contato</a>
-                    </li>
-                </ul>
-            </div>
+                {% endif %}
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
 
     <main class="min-vh-100">
         {% if messages %}
@@ -89,5 +121,52 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Função para aplicar as máscaras
+        const handleZipCode = (event) => {
+        let input = event.target
+        input.value = zipCodeMask(input.value)
+        }
+
+        const zipCodeMask = (value) => {
+        if (!value) return ""
+        value = value.replace(/\D/g, '')
+        value = value.replace(/(\d{5})(\d)/, '$1-$2')
+        return value
+        }
+
+        const handleCPF = (event) => {
+        let input = event.target
+        input.value = cpfMask(input.value)
+        }
+
+        const cpfMask = (value) => {
+        if (!value) return ""
+        value = value.replace(/\D/g, '')
+        value = value.replace(/(\d{3})(\d)/, '$1.$2')
+        value = value.replace(/(\d{3})(\d)/, '$1.$2')
+        value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2')
+        return value
+        }
+
+        const handlePhone = (event) => {
+        let input = event.target
+        input.value = phoneMask(input.value)
+        }
+
+        const phoneMask = (value) => {
+        if (!value) return ""
+        value = value.replace(/\D/g, '')
+        value = value.replace(/(\d{2})(\d)/, '($1) $2')
+        value = value.replace(/(\d{5})(\d)/, '$1-$2')
+        return value
+        }
+
+
+        
+    </script>
+
+    {% block extra_js %}{% endblock %}
 </body>
 </html>

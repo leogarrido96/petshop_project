@@ -1,16 +1,15 @@
 from django.views.generic import TemplateView, CreateView
-from django.urls import reverse_lazy
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 from rest_framework import viewsets, mixins
 
 from .models import NewsletterSubscriber, SiteConfiguration, ContactMessage
 from .forms import ContactForm
 from .serializers import SiteConfigSerializer, ContactMessageSerializer
-
-try:
-    from catalog.models import Product
-except ImportError:
-    Product = None
+from pets.models import Pet
+from addresses.models import Address
+from catalog.models import Product
 
 
 class HomeView(TemplateView):
@@ -67,3 +66,18 @@ class ContactMessageViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     """Permite apenas a criação (POST) de mensagens via API"""
     queryset = ContactMessage.objects.all()
     serializer_class = ContactMessageSerializer
+
+
+class DashboardView(LoginRequiredMixin, TemplateView):
+    template_name = 'main/dashboard.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+
+        context['pets'] = Pet.objects.filter(owner=user)
+        context['main_address'] = Address.objects.filter(user=user, is_main=True).first()
+
+        context['promotions'] = Product.objects.filter(is_active=True)[:3]
+
+        return context

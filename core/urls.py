@@ -5,16 +5,20 @@ from django.conf.urls.static import static
 from rest_framework import routers
 
 
+from accounts.views import UserViewSet
 from catalog.views import ProductViewSet, CategoryViewSet
 from gallery.views import PhotoViewSet
 from main.views import SiteConfigViewSet, ContactMessageViewSet
 
+
 router = routers.DefaultRouter()
-router.register(r'products', ProductViewSet)
 router.register(r'categories', CategoryViewSet)
+router.register(r'products', ProductViewSet)
 router.register(r'gallery', PhotoViewSet)
 router.register(r'site-config', SiteConfigViewSet)
 router.register(r'contact', ContactMessageViewSet)
+router.register(r'accounts', UserViewSet)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -23,6 +27,9 @@ urlpatterns = [
     path('', include('main.urls')),
     path('catalogo/', include('catalog.urls')),
     path('galeria/', include('gallery.urls')),
+    path('contas/', include('accounts.urls')),
+    path('enderecos/', include('addresses.urls')),
+    path('pets/', include('pets.urls')),
 
     # Rota da API
     path('api/v1/', include(router.urls)),

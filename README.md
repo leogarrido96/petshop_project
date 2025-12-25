@@ -1,6 +1,6 @@
 # 🐾 PetShop Project
 
-Um sistema web completo para petshops desenvolvido em Django com funcionalidades para gerenciamento de produtos, galeria de fotos e área institucional.
+Um sistema web completo para petshops desenvolvido em Django com funcionalidades para gerenciamento de produtos, galeria de fotos, área institucional e sistema completo de usuários.
 
 ## 📋 Funcionalidades
 
@@ -9,6 +9,29 @@ Um sistema web completo para petshops desenvolvido em Django com funcionalidades
 - **Sobre Nós**: Informações sobre a empresa
 - **Contato**: Formulário de contato com sistema de mensagens
 - **Newsletter**: Sistema de inscrição para newsletter
+- **Dashboard**: Painel personalizado para usuários logados
+
+### 👥 Sistema de Usuários (Accounts)
+- **Autenticação Completa**: Sistema de login, logout e cadastro
+- **Perfil Personalizado**: Usuário customizado com:
+  - CPF (com validação brasileira)
+  - Telefone
+  - Foto de perfil
+- **Integração**: Sistema integrado com todos os módulos
+
+### 🏠 Gerenciamento de Endereços (Addresses)
+- **Múltiplos Endereços**: Usuários podem cadastrar vários endereços
+- **Endereço Principal**: Sistema de endereço padrão
+- **Validação Brasileira**: Campos adequados ao padrão brasileiro
+- **CRUD Completo**: Criar, editar, visualizar e excluir endereços
+
+### 🐕 Gestão de Pets (Pets)
+- **Cadastro de Pets**: Registro completo dos animais de estimação
+- **Informações Detalhadas**:
+  - Nome, espécie (cão/gato), raça
+  - Data de nascimento
+  - Observações de saúde e comportamento
+- **Vinculação ao Proprietário**: Pets ligados aos usuários cadastrados
 
 ### 📦 Catálogo (Catalog)
 - **Gestão de Categorias**: Organização de produtos por categorias
@@ -22,21 +45,27 @@ Um sistema web completo para petshops desenvolvido em Django com funcionalidades
 ### 📸 Galeria (Gallery)
 - **Galeria de Fotos**: Exposição de pets atendidos
 - **Sistema de Upload**: Upload de imagens com títulos e legendas
+- **Sistema de Moderação**: Fotos com status de aprovação (ativo/inativo/pendente)
 - **Organização Cronológica**: Ordenação por data de upload
 
 ### 🔧 Funcionalidades Técnicas
-- **API REST**: Interface para integração com outros sistemas
+- **API REST**: Interface completa para integração com outros sistemas
+- **Sistema de Autenticação**: Login/logout com usuário customizado
 - **Admin Django**: Painel administrativo completo
-- **Sistema de Templates**: Interface responsiva
+- **Sistema de Templates**: Interface responsiva com Bootstrap 5
 - **Gestão de Mídia**: Upload e servimento de imagens
-- **Banco de Dados**: PostgreSQL para produção
+- **Banco de Dados**: PostgreSQL para produção, SQLite para desenvolvimento
+- **Validações Brasileiras**: CPF, CEP e outros campos com validação local
 
 ## 🛠️ Tecnologias Utilizadas
 
 - **Backend**: Django 6.0
 - **Database**: PostgreSQL (Docker) / SQLite (desenvolvimento)
 - **API**: Django REST Framework
-- **Frontend**: HTML/CSS/JavaScript com templates Django
+- **Frontend**: HTML/CSS/JavaScript com Bootstrap 5
+- **Autenticação**: Sistema customizado de usuários Django
+- **Validações**: Django Localflavor para validações brasileiras
+- **Forms**: Crispy Forms com Bootstrap 5
 - **Imagens**: Pillow para processamento
 - **Container**: Docker e Docker Compose
 - **Admin Interface**: PgAdmin para gerenciamento do banco
@@ -46,11 +75,15 @@ Um sistema web completo para petshops desenvolvido em Django com funcionalidades
 ```
 petshop_project/
 ├── core/                    # Configurações principais
-├── main/                    # App institucional (home, contato, sobre)
+├── main/                    # App institucional (home, contato, sobre, dashboard)
+├── accounts/                # Sistema de autenticação e usuários
+├── addresses/               # Gerenciamento de endereços
+├── pets/                    # Cadastro e gestão de pets
 ├── catalog/                 # App de produtos e categorias
 ├── gallery/                 # App de galeria de fotos
 ├── templates/               # Templates globais
 ├── staticfiles/             # Arquivos estáticos coletados
+├── media/                   # Arquivos de mídia (fotos, uploads)
 ├── data/                    # Dados do PostgreSQL e PgAdmin
 ├── docker-compose.yml       # Configuração dos containers
 ├── Dockerfile              # Imagem da aplicação
@@ -133,6 +166,23 @@ python manage.py runserver
 
 ## 📊 Modelos de Dados
 
+### Accounts App
+- **User**: Usuário customizado (AbstractUser)
+  - CPF (com validação), telefone, foto de perfil
+  - Todos os campos padrão do Django (username, email, etc.)
+
+### Addresses App
+- **Address**: Endereços dos usuários
+  - CEP, logradouro, número, complemento
+  - Bairro, cidade, estado
+  - Flag de endereço principal
+
+### Pets App
+- **Pet**: Cadastro de animais de estimação
+  - Nome, espécie (cão/gato), raça
+  - Data de nascimento, observações
+  - Vinculação com o proprietário (User)
+
 ### Catalog App
 - **Category**: Categorias de produtos
   - Nome, slug, descrição
@@ -144,10 +194,12 @@ python manage.py runserver
   - Nome, email, telefone, mensagem, data, status de leitura
 - **NewsletterSubscriber**: Inscritos na newsletter
   - Email, data de inscrição
+- **SiteConfiguration**: Configurações do site
+  - Banners, imagens institucionais
 
 ### Gallery App
 - **Photo**: Fotos da galeria
-  - Título, legenda, imagem, data de upload
+  - Título, legenda, imagem, status de ativação, data de upload
 
 ## 🔐 Admin Django
 
@@ -222,7 +274,16 @@ O projeto inclui uma API REST completa para integração com outros sistemas:
 }
 ```
 
-#### 📸 Galeria - `/gallery/`
+#### � Usuários - `/accounts/`
+**CRUD Completo** (ModelViewSet)
+- `GET /api/v1/accounts/` - Lista usuários (requer autenticação)
+- `POST /api/v1/accounts/` - Cria um novo usuário
+- `GET /api/v1/accounts/{id}/` - Detalhes de um usuário específico
+- `PUT /api/v1/accounts/{id}/` - Atualiza usuário completo (requer autenticação)
+- `PATCH /api/v1/accounts/{id}/` - Atualiza parcialmente usuário (requer autenticação)
+- `DELETE /api/v1/accounts/{id}/` - Remove usuário (requer autenticação)
+
+#### �📸 Galeria - `/gallery/`
 **CRUD Completo** (ModelViewSet)
 - `GET /api/v1/gallery/` - Lista todas as fotos (ordenadas por data)
 - `POST /api/v1/gallery/` - Adiciona uma nova foto (autenticação necessária)
@@ -328,6 +389,21 @@ curl -X POST http://localhost:8000/api/v1/contact/ \
 - `GET /sobre-nos/` - Página sobre a empresa  
 - `GET /contato/` - Formulário de contato
 
+#### Sistema de Usuários
+- `GET /contas/login/` - Página de login
+- `GET /contas/signup/` - Página de cadastro
+- `GET /contas/dashboard/` - Painel do usuário (requer login)
+
+#### Gestão de Pets
+- `GET /pets/` - Lista de pets do usuário (requer login)
+- `GET /pets/novo/` - Cadastro de novo pet
+- `GET /pets/{id}/editar/` - Edição de pet
+
+#### Gestão de Endereços
+- `GET /enderecos/` - Lista de endereços do usuário (requer login)
+- `GET /enderecos/novo/` - Cadastro de novo endereço
+- `GET /enderecos/{id}/editar/` - Edição de endereço
+
 #### Catálogo de Produtos
 - `GET /catalogo/` - Lista de produtos por categoria
 
@@ -385,14 +461,21 @@ docker-compose logs pgadmin
 
 ## 📚 Próximas Implementações
 
-- [x] Sistema de API do projeto
-- [ ] Sistema de autenticação de usuários
+- [x] Sistema de API completo do projeto
+- [x] Sistema de autenticação de usuários
+- [x] Cadastro e gestão de pets
+- [x] Sistema de endereços múltiplos
+- [x] Dashboard personalizado para usuários
+- [x] Sistema de moderação de fotos na galeria
 - [ ] Carrinho de compras
-- [ ] Sistema de pedidos
-- [ ] Integração com Frete
+- [ ] Sistema de pedidos e agendamentos
+- [ ] Integração com sistema de pagamento
+- [ ] Sistema de agendamento de serviços
 - [ ] Notificações por email
-- [ ] Dashboard de vendas
-- [ ] Sistema de avaliações
+- [ ] Dashboard de vendas para administradores
+- [ ] Sistema de avaliações e comentários
+- [ ] Histórico de serviços por pet
+- [ ] Relatórios gerenciais
 
 ## 🤝 Contribuição
 

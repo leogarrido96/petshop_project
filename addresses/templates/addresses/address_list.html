@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="text-success fw-bold">Meus Endereços</h2>
+            <p class="text-muted">Gerencie seus locais para serviços de busca e entrega.</p>
+        </div>
+        <div class="col-auto">
+            <a href="{% url 'address_add' %}" class="btn btn-success">Novo Endereço</a>
+        </div>
+    </div>
+
+    <div class="list-group shadow-sm">
+        {% for addr in my_addresses %}
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="mb-1 fw-bold">{{ addr.street }}, {{ addr.number }}</h6>
+                    <small class="text-secondary">{{ addr.neighborhood }} - {{ addr.city }}</small>
+                    {% if addr.is_main %}
+                        <span class="badge bg-success ms-2">Principal</span>
+                    {% endif %}
+                </div>
+            </div>
+        {% empty %}
+            <div class="list-group-item text-center py-4">
+                <p class="mb-0">Nenhum endereço cadastrado para entregas.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

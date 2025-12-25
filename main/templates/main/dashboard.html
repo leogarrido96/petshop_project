@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="text-success fw-bold">Olá, {{ user.first_name }}! 🐾</h2>
+            <p class="text-muted">Bem-vindo à família Melhor Amigo.</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold mb-0">Seus Melhores Amigos</h5>
+                        <a href="{% url 'pet_add' %}" class="btn btn-sm btn-outline-success">Novo Pet</a>
+                    </div>
+                    <div class="row">
+                        {% for pet in pets %}
+                        <div class="col-md-6 mb-2">
+                            <div class="p-3 border rounded-3 bg-light">
+                                <span class="fw-bold text-success">{{ pet.name }}</span> - {{ pet.get_species_display }}
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p class="text-muted small px-3">Cadastre seu pet para receber orientações personalizadas. </p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-4 bg-success text-white">
+                <div class="card-body">
+                    <h5 class="fw-bold">Ofertas Especiais </h5>
+                    <div class="row">
+                        {% for prod in promotions %}
+                        <div class="col-md-4">
+                            <small class="d-block">{{ prod.name }} </small>
+                            <a href="{% url 'product_list' %}" class="text-white fw-bold">Ver mais</a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3">Endereço de Coleta</h5>
+                    {% if main_address %}
+                        <p class="small mb-1 fw-bold">{{ main_address.street }}, {{ main_address.number }}</p>
+                        <p class="small text-muted">{{ main_address.neighborhood }}</p>
+                    {% else %}
+                        <p class="small text-danger">Nenhum endereço principal definido.</p>
+                    {% endif %}
+                    <a href="{% url 'address_list' %}" class="btn btn-link btn-sm text-success p-0">Gerenciar endereços</a>
+                </div>
+            </div>
+
+            <div class="list-group shadow-sm rounded-4 overflow-hidden">
+                <a href="{% url 'product_list' %}" class="list-group-item list-group-item-action">Agendar Tosa Especializada</a>
+                <a href="{% url 'product_list' %}" class="list-group-item list-group-item-action">Solicitar Banho Relaxante</a>
+                <a href="{% url 'contact' %}" class="list-group-item list-group-item-action text-success fw-bold">Falar com um Especialista</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
